@@ -1,0 +1,4 @@
+# Rename this file to gradle.properties
+
+# Create your app id at https://webservice.rakuten.co.jp/app/create
+rakutenApplicationId=YOUR_APP_ID
