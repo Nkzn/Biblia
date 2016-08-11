@@ -11,8 +11,10 @@ import java.util.List;
 
 import info.nkzn.biblia.Biblia;
 import info.nkzn.biblia.rakuten.Book;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText etKeyword;
     private Button btnSearch;
     private TextView tvResult;
+
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +38,26 @@ public class MainActivity extends AppCompatActivity {
         btnSearch.setOnClickListener(v -> search());
     }
 
+    @Override
+    protected void onDestroy() {
+        if (subscriptions.isUnsubscribed()) {
+            subscriptions.unsubscribe();
+        }
+        super.onDestroy();
+    }
+
     private void search() {
         String keyword = etKeyword.getText().toString();
         if (TextUtils.isEmpty(keyword)) {
             return;
         }
 
-        Biblia.client().search(keyword)
+        Subscription subscription = Biblia.client().search(keyword)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSearchFinished, this::onError);
+
+        subscriptions.add(subscription);
     }
 
     private void onSearchFinished(List<Book> books) {
