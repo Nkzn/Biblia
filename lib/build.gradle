@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 24
@@ -45,4 +46,15 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+publish {
+    artifactId = 'biblia'
+    desc = 'A book search library based on RxJava'
+
+    groupId = 'info.nkzn.biblia'
+    publishVersion = '0.1.0'
+    website = 'https://github.com/Nkzn/Biblia'
+    repository = 'git@github.com:Nkzn/Biblia.git'
+    licences = ['Apache-2.0']
 }
