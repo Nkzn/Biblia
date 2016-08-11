@@ -5,7 +5,7 @@ Android向けの書籍検索ライブラリです。次の書籍検索APIに対�
 
 * [楽天ブックス書籍検索API](https://webservice.rakuten.co.jp/api/booksbooksearch/)
 
-Usage
+使い方
 ----------
 
 ### 初期設定
@@ -65,3 +65,10 @@ protected void onDestroy() {
     super.onDestroy();
 }
 ```
+
+サンプルを動かす
+----------
+
+1. [楽天APIアプリID発行ページ](https://webservice.rakuten.co.jp/app/create)でAppIDを発行します
+2. gradle.properties.templateをgradle.propertiesにコピーして、AppIDを書き込む
+3. ビルドする
