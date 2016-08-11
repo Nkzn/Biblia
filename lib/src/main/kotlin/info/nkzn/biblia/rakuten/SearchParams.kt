@@ -12,7 +12,7 @@ data class SearchParams(
         /** レスポンス形式 */
         val format: String = "json", // XML来られても困る
         /** 出力パラメータ指定 */
-        val elements: List<Elements> = SearchParams.Elements.values().toList(),
+        val elements: List<Elements>? = null,
         /** 出力フォーマットバージョン */
         val formatVersion: Int = 2, // v1来られても困る
 
@@ -74,9 +74,11 @@ data class SearchParams(
 
         map.put("format", format)
 
-        if (!elements.isEmpty()) {
+        if (elements != null && !elements.isEmpty()) {
             val joinedElements = elements.map { it.name }.joinToString(separator = ",") { it -> it }
-            map.put("elements", joinedElements)
+            if (joinedElements.isNotEmpty()) {
+                map.put("elements", joinedElements)
+            }
         }
 
         map.put("formatVersion", formatVersion.toString())
