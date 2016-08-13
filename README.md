@@ -55,8 +55,7 @@ Biblia.client().search(title)
 実用的なコードは次のような形になるはずです。
 
 ```java
-private final CompositeSubscription subscriptions =
-  new CompositeSubscription();
+private final CompositeSubscription subscriptions = new CompositeSubscription();
 
 private void search(String title) {
   Subscription subscription = Biblia.client().search(title)
