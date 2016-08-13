@@ -3,68 +3,68 @@ package info.nkzn.biblia.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.List;
+import com.google.gson.Gson;
 
-import info.nkzn.biblia.Biblia;
-import info.nkzn.biblia.rakuten.Book;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import info.nkzn.biblia.rakuten.SearchParams;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private EditText etKeyword;
-    private Button btnSearch;
-    private TextView tvResult;
-
-    private final CompositeSubscription subscriptions = new CompositeSubscription();
+    private EditText etTitle;
+    private EditText etAuthor;
+    private EditText etPublisherName;
+    private EditText etIsbn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etKeyword = (EditText) findViewById(R.id.et_keyword);
-        btnSearch = (Button) findViewById(R.id.btn_search);
-        tvResult = (TextView) findViewById(R.id.tv_result);
+        etTitle = (EditText) findViewById(R.id.et_title);
+        etAuthor = (EditText) findViewById(R.id.et_author);
+        etPublisherName = (EditText) findViewById(R.id.et_publisher_name);
+        etIsbn = (EditText) findViewById(R.id.et_isbn);
 
-        btnSearch.setOnClickListener(v -> search());
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (subscriptions.isUnsubscribed()) {
-            subscriptions.unsubscribe();
-        }
-        super.onDestroy();
+        findViewById(R.id.btn_search).setOnClickListener(v -> search());
     }
 
     private void search() {
-        String keyword = etKeyword.getText().toString();
-        if (TextUtils.isEmpty(keyword)) {
+        SearchParams.Builder builder = new SearchParams.Builder();
+
+        if (hasValue(etTitle)) {
+            builder.title(etTitle.getText().toString());
+        }
+
+        if (hasValue(etAuthor)) {
+            builder.author(etAuthor.getText().toString());
+        }
+
+        if (hasValue(etPublisherName)) {
+            builder.publisherName(etPublisherName.getText().toString());
+        }
+
+        if (hasValue(etIsbn)) {
+            builder.isbn(etIsbn.getText().toString());
+        }
+
+        SearchParams searchParams = builder.build();
+
+        Log.d(TAG, new Gson().toJson(searchParams));
+
+        if (!searchParams.isValid()) {
+            Toast.makeText(this, "必須項目が入力されていません", Toast.LENGTH_LONG).show();
             return;
         }
 
-        Subscription subscription = Biblia.client().search(keyword)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onSearchFinished, this::onError);
-
-        subscriptions.add(subscription);
+        startActivity(SearchResultActivity.createIntent(this, searchParams));
     }
 
-    private void onSearchFinished(List<Book> books) {
-        tvResult.setText(books.toString());
-    }
-
-    private void onError(Throwable throwable) {
-        tvResult.setText(String.format("Error:\n%s", throwable.getMessage()));
+    private boolean hasValue(EditText editText) {
+        return !TextUtils.isEmpty(editText.getText().toString());
     }
 }

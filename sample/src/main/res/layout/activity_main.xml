@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -12,32 +11,66 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="タイトル"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="著者名"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_publisher_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_publisher_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="出版社名"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/text_input_isbn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_isbn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="ISBNコード"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <EditText
-            android:id="@+id/et_keyword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="text"
-            android:hint="キーワード"/>
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/search_go" />
-    </LinearLayout>
+        android:text="検索" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
-        <TextView
-            android:id="@+id/tv_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
 </LinearLayout>
