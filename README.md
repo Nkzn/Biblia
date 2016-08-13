@@ -8,6 +8,18 @@ Android向けの書籍検索ライブラリです。次の書籍検索APIに対�
 使い方
 ----------
 
+### インストール
+
+```diff
+// app/build.gradle
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:24.1.1'
++    compile 'info.nkzn.biblia:biblia:0.2.0'
+    testCompile 'junit:junit:4.12'
+}
+```
+
 ### 初期設定
 
 `Application#onCreate` でAPIキー（AppID）の登録をおこなってください。
@@ -64,6 +76,29 @@ protected void onDestroy() {
     }
     super.onDestroy();
 }
+```
+
+### 色んなパラメータで検索を行う
+
+複数のパラメータで検索を行う場合は、 `Biblia.client().search(SearchParams)` を使用します。 `SearchParams.Builder` を利用すると、より効率的にSearchParamsを組み立てられます。
+
+```java
+SearchParams params = new SearchParams.Builder()
+    .title("メロス")
+    .author("太宰治")
+    .build();
+
+// or
+// SearchParams.Builder builder = new SearchParams.Builder();
+// builder.title("メロス");
+// builder.author("太宰治");
+// SearchParams params = builder.build();
+
+Biblia.client().search(params)
+    ...
+    .subscribe(books -> {
+        displayResults(books);
+    });
 ```
 
 サンプルを動かす
