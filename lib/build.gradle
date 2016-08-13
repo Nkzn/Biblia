@@ -53,7 +53,7 @@ publish {
     desc = 'A book search library based on RxJava'
 
     groupId = 'info.nkzn.biblia'
-    publishVersion = '0.1.0'
+    publishVersion = '0.2.0'
     website = 'https://github.com/Nkzn/Biblia'
     repository = 'git@github.com:Nkzn/Biblia.git'
     licences = ['Apache-2.0']
