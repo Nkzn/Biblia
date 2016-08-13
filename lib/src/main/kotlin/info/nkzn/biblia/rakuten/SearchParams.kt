@@ -1,5 +1,8 @@
 package info.nkzn.biblia.rakuten
 
+import android.support.annotation.NonNull
+import java.io.Serializable
+
 /**
  * 楽天ブックス書籍検索API 入力パラメーター version:2013-05-22
  */
@@ -47,16 +50,15 @@ data class SearchParams(
         var carrier: Carrier = SearchParams.Carrier.PC,
         /** ジャンルごとの商品数取得フラグ */
         var genreInformationFlag: GenreInformationFlag = SearchParams.GenreInformationFlag.NotRequired
-) {
-    init {
+): Serializable {
+
+    fun isValid(): Boolean {
         // 「タイトル、著者名、出版社名、書籍のサイズ、ISBNコード、楽天ブックスジャンルIDのいずれかが指定されていることが必須です」
-        if (title == null
-                && author == null
-                && publisherName == null
-                && isbn == null
-                && booksGenreId == null) {
-            throw IllegalArgumentException("title or author or publisherName or isbn or booksGenreId should be filled.")
-        }
+        return title != null
+                || author != null
+                || publisherName != null
+                || isbn != null
+                || booksGenreId != null;
     }
 
     fun toParams(): Map<String, String> {
@@ -392,6 +394,7 @@ data class SearchParams(
             searchParams.genreInformationFlag = genreInformationFlag
             return this
         }
+        @NonNull
         fun build(): SearchParams? {
             return searchParams
         }
