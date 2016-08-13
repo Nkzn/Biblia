@@ -14,7 +14,7 @@ class RakutenApiClient(): ApiClient {
 
     override fun search(title: String): Observable<List<Book>> = search(SearchParams(title = title))
 
-    fun search(params: SearchParams): Observable<List<Book>> {
+    override fun search(params: SearchParams): Observable<List<Book>> {
         params.applicationId = applicationId
 
         val retrofit = Retrofit.Builder()

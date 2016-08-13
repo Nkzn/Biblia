@@ -8,45 +8,45 @@ data class SearchParams(
         /** アプリID */
         var applicationId: String? = null,
         /** アフィリエイトID */
-        val affiliateId: String? = null,
+        var affiliateId: String? = null,
         /** レスポンス形式 */
-        val format: String = "json", // XML来られても困る
+        var format: String = "json", // XML来られても困る
         /** 出力パラメータ指定 */
-        val elements: List<Elements>? = null,
+        var elements: List<Elements>? = null,
         /** 出力フォーマットバージョン */
-        val formatVersion: Int = 2, // v1来られても困る
+        var formatVersion: Int = 2, // v1来られても困る
 
         /* 区分:サービス固有パラメーター */
         /** 書籍タイトル */
-        val title: String? = null,
+        var title: String? = null,
         /** 著者名 */
-        val author: String? = null,
+        var author: String? = null,
         /** 出版社名 */
-        val publisherName: String? = null,
+        var publisherName: String? = null,
         /** 書籍のサイズ */
-        val size: Size = SearchParams.Size.ALL,
+        var size: Size = SearchParams.Size.ALL,
         /** ISBNコード */
-        val isbn: String? = null,
+        var isbn: String? = null,
         /** 楽天ブックスジャンルID */
-        val booksGenreId: String? = null,
+        var booksGenreId: String? = null,
         /** 1ページあたりの取得件数	 */
-        val hits: Int = 30,
+        var hits: Int = 30,
         /** 取得ページ */
-        val page: Int = 1,
+        var page: Int = 1,
         /** 在庫状況 */
-        val availability: Availability = SearchParams.Availability.ALL,
+        var availability: Availability = SearchParams.Availability.ALL,
         /** 品切れ等購入不可商品表示フラグ */
-        val outOfStockFlag: OutOfStockFlag = SearchParams.OutOfStockFlag.Invisible,
+        var outOfStockFlag: OutOfStockFlag = SearchParams.OutOfStockFlag.Invisible,
         /** チラよみフラグ */
-        val chirayomiFlag: ChirayomiFlag = SearchParams.ChirayomiFlag.ALL,
+        var chirayomiFlag: ChirayomiFlag = SearchParams.ChirayomiFlag.ALL,
         /** ソート */
-        val sort: Sort = SearchParams.Sort.Standard,
+        var sort: Sort = SearchParams.Sort.Standard,
         /** 限定フラグ */
-        val limitedFlag: LimitedFlag = SearchParams.LimitedFlag.ALL,
+        var limitedFlag: LimitedFlag = SearchParams.LimitedFlag.ALL,
         /** キャリア */
-        val carrier: Carrier = SearchParams.Carrier.PC,
+        var carrier: Carrier = SearchParams.Carrier.PC,
         /** ジャンルごとの商品数取得フラグ */
-        val genreInformationFlag: GenreInformationFlag = SearchParams.GenreInformationFlag.NotRequired
+        var genreInformationFlag: GenreInformationFlag = SearchParams.GenreInformationFlag.NotRequired
 ) {
     init {
         // 「タイトル、著者名、出版社名、書籍のサイズ、ISBNコード、楽天ブックスジャンルIDのいずれかが指定されていることが必須です」
@@ -66,54 +66,70 @@ data class SearchParams(
 
         val map = mutableMapOf<String, String>()
 
-        map.put("applicationId", applicationId!!)
-
-        if (affiliateId != null) {
-            map.put("affiliateId", affiliateId)
+        applicationId?.let {
+            map.put("applicationId", it)
         }
-
-        map.put("format", format)
-
-        if (elements != null && !elements.isEmpty()) {
-            val joinedElements = elements.map { it.name }.joinToString(separator = ",") { it -> it }
+        affiliateId?.let {
+            map.put("affiliateId", it )
+        }
+        format.let {
+            map.put("format", format)
+        }
+        elements?.let {
+            it.map { it.name }.joinToString(separator = ",") { it -> it }
+        }?.let { joinedElements ->
             if (joinedElements.isNotEmpty()) {
                 map.put("elements", joinedElements)
             }
         }
-
-        map.put("formatVersion", formatVersion.toString())
-
-        if (title != null) {
-            map.put("title", title)
+        formatVersion.let {
+            map.put("formatVersion", it.toString())
         }
-
-        if (author != null) {
-            map.put("author", author)
+        title?.let {
+            map.put("title", it)
         }
-
-        if (publisherName != null) {
-            map.put("publisherName", publisherName)
+        author?.let {
+            map.put("author", it)
         }
-
-        map.put("size", size.code.toString())
-
-        if (isbn != null) {
-            map.put("isbn", isbn)
+        publisherName?.let {
+            map.put("publisherName", it)
         }
-
-        if (booksGenreId != null) {
-            map.put("booksGenreId", booksGenreId)
+        size.let {
+            map.put("size", size.code.toString())
         }
-
-        map.put("hits", hits.toString())
-        map.put("page", page.toString())
-        map.put("availability", availability.code.toString())
-        map.put("outOfStockFlag", outOfStockFlag.code.toString())
-        map.put("chirayomiFlag", chirayomiFlag.code.toString())
-        map.put("sort", sort.code)
-        map.put("limitedFlag", limitedFlag.code.toString())
-        map.put("carrier", carrier.code.toString())
-        map.put("genreInformationFlag", genreInformationFlag.code.toString())
+        isbn?.let {
+            map.put("isbn", it)
+        }
+        booksGenreId?.let {
+            map.put("booksGenreId", it)
+        }
+        hits.let {
+            map.put("hits", hits.toString())
+        }
+        page.let {
+            map.put("page", page.toString())
+        }
+        availability.let {
+            map.put("availability", availability.code.toString())
+        }
+        outOfStockFlag.let {
+            map.put("outOfStockFlag", outOfStockFlag.code.toString())
+        }
+        chirayomiFlag.let {
+            map.put("chirayomiFlag", chirayomiFlag.code.toString())
+        }
+        sort.let {
+            map.put("sort", it.code)
+        }
+        limitedFlag.let {
+            map.put("limitedFlag", limitedFlag.code.toString())
+        }
+        carrier.let {
+            map.put("carrier", carrier.code.toString())
+        }
+        genreInformationFlag.let {
+            map.put("genreInformationFlag", genreInformationFlag.code.toString())
+        }
 
         return map
     }
@@ -273,6 +289,111 @@ data class SearchParams(
         /** ジャンルごとの商品数の情報を取得する */
         Required(1)
     }
+
+    /**
+     * 検索パラメータを組み立てるBuilder
+     * （Kotlinから利用する場合はSearchParamsの名前付きコンストラクタを使うべきです）
+     */
+    class Builder() {
+        private val searchParams: SearchParams = SearchParams()
+
+        /** アフィリエイトID */
+        fun affiliateId(affiliateId: String): Builder {
+            searchParams.affiliateId = affiliateId
+            return this
+        }
+        /** レスポンス形式 */
+        fun format(format: String): Builder {
+            searchParams.format = format
+            return this
+        }
+        /** 出力パラメータ指定 */
+        fun elements(elements: List<Elements>): Builder {
+            searchParams.elements = elements
+            return this
+        }
+        /** 出力フォーマットバージョン */
+        fun formatVersion(formatVersion: Int): Builder {
+            searchParams.formatVersion = formatVersion
+            return this
+        }
+        /** 書籍タイトル */
+        fun title(title: String): Builder {
+            searchParams.title = title
+            return this
+        }
+        /** 著者名 */
+        fun author(author: String): Builder {
+            searchParams.author = author
+            return this
+        }
+        /** 出版社名 */
+        fun publisherName(publisherName: String): Builder {
+            searchParams.publisherName = publisherName
+            return this
+        }
+        /** 書籍のサイズ */
+        fun size(size: Size): Builder {
+            searchParams.size = size
+            return this
+        }
+        /** ISBNコード */
+        fun isbn(isbn: String): Builder {
+            searchParams.isbn = isbn
+            return this
+        }
+        /** 楽天ブックスジャンルID */
+        fun booksGenreId(booksGenreId: String): Builder {
+            searchParams.booksGenreId = booksGenreId
+            return this
+        }
+        /** 1ページあたりの取得件数	 */
+        fun hits(hits: Int): Builder {
+            searchParams.hits = hits
+            return this
+        }
+        /** 取得ページ */
+        fun page(page: Int): Builder {
+            searchParams.page = page
+            return this
+        }
+        /** 在庫状況 */
+        fun availability(availability: Availability): Builder {
+            searchParams.availability = availability
+            return this
+        }
+        /** 品切れ等購入不可商品表示フラグ */
+        fun outOfStockFlag(outOfStockFlag: OutOfStockFlag): Builder {
+            searchParams.outOfStockFlag = outOfStockFlag
+            return this
+        }
+        /** チラよみフラグ */
+        fun chirayomiFlag(chirayomiFlag: ChirayomiFlag): Builder {
+            searchParams.chirayomiFlag = chirayomiFlag
+            return this
+        }
+        /** ソート */
+        fun sort(sort: Sort): Builder {
+            searchParams.sort = sort
+            return this
+        }
+        /** 限定フラグ */
+        fun limitedFlag(limitedFlag: LimitedFlag): Builder {
+            searchParams.limitedFlag = limitedFlag
+            return this
+        }
+        /** キャリア */
+        fun carrier(carrier: Carrier): Builder {
+            searchParams.carrier = carrier
+            return this
+        }
+        /** ジャンルごとの商品数取得フラグ */
+        fun genreInformationFlag(genreInformationFlag: GenreInformationFlag): Builder {
+            searchParams.genreInformationFlag = genreInformationFlag
+            return this
+        }
+        fun build(): SearchParams? {
+            return searchParams
+        }
+    }
 }
-
-
